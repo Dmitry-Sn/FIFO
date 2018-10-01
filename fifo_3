@@ -1,0 +1,192 @@
+#! /c/iverilog/bin/vvp
+:ivl_version "0.9.7 " "(v0_9_7)";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_01307DB0 .scope module, "test_fifo" "test_fifo" 2 1;
+ .timescale 0 0;
+v01208E38_0 .var "clk", 0 0;
+v01208E90_0 .var "din", 15 0;
+v01209200_0 .net "dout", 15 0, L_0120A3B0; 1 drivers
+v01208FF0_0 .net "empty", 0 0, L_0120A1F8; 1 drivers
+v01208F98_0 .net "full", 0 0, L_0120A0F0; 1 drivers
+v012092B0_0 .var "rd_en", 0 0;
+v01208C80_0 .var "reset", 0 0;
+v01209048_0 .var "wr_en", 0 0;
+S_013070F0 .scope module, "fifo_inst" "fifo" 2 9, 3 1, S_01307DB0;
+ .timescale 0 0;
+P_011E26E4 .param/l "DATA_WIDTH" 3 3, +C4<010000>;
+P_011E26F8 .param/l "LOG2_DEPTH" 3 4, +C4<0100>;
+P_011E270C .param/l "MAX_COUNT" 3 17, +C4<010000>;
+v01308330_0 .net *"_s0", 5 0, L_01209308; 1 drivers
+v01309420_0 .net *"_s11", 1 0, C4<00>; 1 drivers
+v011E38D8_0 .net *"_s12", 6 0, C4<0010000>; 1 drivers
+v011E17E0_0 .net *"_s16", 15 0, L_0120A358; 1 drivers
+v0130AD90_0 .net *"_s18", 15 0, C4<0000000000000000>; 1 drivers
+v0130ADE8_0 .net *"_s3", 0 0, C4<0>; 1 drivers
+v0130AE40_0 .net *"_s4", 5 0, C4<000000>; 1 drivers
+v01208EE8_0 .net *"_s8", 6 0, L_0120A250; 1 drivers
+v01209360_0 .net "clk", 0 0, v01208E38_0; 1 drivers
+v01208DE0_0 .var "depth_cnt", 4 0;
+v01208C28_0 .net "din", 15 0, v01208E90_0; 1 drivers
+v012090A0_0 .alias "dout", 15 0, v01209200_0;
+v012090F8_0 .alias "empty", 0 0, v01208FF0_0;
+v01208CD8_0 .alias "full", 0 0, v01208F98_0;
+v01208D88 .array "mem", 0 15, 15 0;
+v01209258_0 .net "rd_en", 0 0, v012092B0_0; 1 drivers
+v01209150_0 .var "rd_ptr", 3 0;
+v01208F40_0 .net "reset", 0 0, v01208C80_0; 1 drivers
+v01208D30_0 .net "wr_en", 0 0, v01209048_0; 1 drivers
+v012091A8_0 .var "wr_ptr", 3 0;
+E_01308850 .event posedge, v01209360_0;
+L_01209308 .concat [ 5 1 0 0], v01208DE0_0, C4<0>;
+L_0120A1F8 .cmp/eq 6, L_01209308, C4<000000>;
+L_0120A250 .concat [ 5 2 0 0], v01208DE0_0, C4<00>;
+L_0120A0F0 .cmp/eq 7, L_0120A250, C4<0010000>;
+L_0120A358 .array/port v01208D88, v01209150_0;
+L_0120A3B0 .functor MUXZ 16, C4<0000000000000000>, L_0120A358, v012092B0_0, C4<>;
+    .scope S_013070F0;
+T_0 ;
+    %wait E_01308850;
+    %load/v 8, v01208F40_0, 1;
+    %jmp/0xz  T_0.0, 8;
+    %ix/load 0, 4, 0;
+    %assign/v0 v012091A8_0, 0, 0;
+    %ix/load 0, 4, 0;
+    %assign/v0 v01209150_0, 0, 0;
+    %jmp T_0.1;
+T_0.0 ;
+    %load/v 8, v01208D30_0, 1;
+    %jmp/0xz  T_0.2, 8;
+    %load/v 8, v012091A8_0, 4;
+    %mov 12, 0, 28;
+    %addi 8, 1, 32;
+    %ix/load 0, 4, 0;
+    %assign/v0 v012091A8_0, 0, 8;
+T_0.2 ;
+    %load/v 8, v01209258_0, 1;
+    %jmp/0xz  T_0.4, 8;
+    %load/v 8, v01209150_0, 4;
+    %mov 12, 0, 28;
+    %addi 8, 1, 32;
+    %ix/load 0, 4, 0;
+    %assign/v0 v01209150_0, 0, 8;
+T_0.4 ;
+T_0.1 ;
+    %jmp T_0;
+    .thread T_0;
+    .scope S_013070F0;
+T_1 ;
+    %wait E_01308850;
+    %load/v 8, v01208D30_0, 1;
+    %jmp/0xz  T_1.0, 8;
+    %load/v 8, v01208C28_0, 16;
+    %ix/getv 3, v012091A8_0;
+    %jmp/1 t_0, 4;
+    %ix/load 0, 16, 0; word width
+    %ix/load 1, 0, 0; part off
+    %assign/av v01208D88, 0, 8;
+t_0 ;
+T_1.0 ;
+    %jmp T_1;
+    .thread T_1;
+    .scope S_013070F0;
+T_2 ;
+    %wait E_01308850;
+    %load/v 8, v01208F40_0, 1;
+    %jmp/0xz  T_2.0, 8;
+    %ix/load 0, 5, 0;
+    %assign/v0 v01208DE0_0, 0, 0;
+    %jmp T_2.1;
+T_2.0 ;
+    %load/v 8, v01208D30_0, 1;
+    %load/v 9, v01209258_0, 1;
+    %cmpi/u 8, 2, 2;
+    %jmp/1 T_2.2, 6;
+    %cmpi/u 8, 1, 2;
+    %jmp/1 T_2.3, 6;
+    %jmp T_2.4;
+T_2.2 ;
+    %load/v 8, v01208DE0_0, 5;
+    %mov 13, 0, 27;
+    %subi 8, 1, 32;
+    %ix/load 0, 5, 0;
+    %assign/v0 v01208DE0_0, 0, 8;
+    %jmp T_2.4;
+T_2.3 ;
+    %load/v 8, v01208DE0_0, 5;
+    %mov 13, 0, 27;
+    %addi 8, 1, 32;
+    %ix/load 0, 5, 0;
+    %assign/v0 v01208DE0_0, 0, 8;
+    %jmp T_2.4;
+T_2.4 ;
+T_2.1 ;
+    %jmp T_2;
+    .thread T_2;
+    .scope S_01307DB0;
+T_3 ;
+    %delay 4, 0;
+    %load/v 8, v01208E38_0, 1;
+    %inv 8, 1;
+    %set/v v01208E38_0, 8, 1;
+    %jmp T_3;
+    .thread T_3;
+    .scope S_01307DB0;
+T_4 ;
+    %set/v v01208E38_0, 0, 1;
+    %set/v v01208C80_0, 0, 1;
+    %set/v v01208E90_0, 0, 16;
+    %set/v v01209048_0, 0, 1;
+    %set/v v012092B0_0, 0, 1;
+    %delay 40, 0;
+    %set/v v01208C80_0, 1, 1;
+    %delay 6, 0;
+    %set/v v01208C80_0, 0, 1;
+    %delay 30, 0;
+    %wait E_01308850;
+    %delay 0, 0;
+    %movi 8, 85, 16;
+    %set/v v01208E90_0, 8, 16;
+    %set/v v01209048_0, 1, 1;
+    %wait E_01308850;
+    %delay 10, 0;
+    %movi 8, 23, 16;
+    %set/v v01208E90_0, 8, 16;
+    %delay 6, 0;
+    %movi 8, 34, 16;
+    %set/v v01208E90_0, 8, 16;
+    %delay 9, 0;
+    %movi 8, 144, 16;
+    %set/v v01208E90_0, 8, 16;
+    %delay 7, 0;
+    %set/v v01209048_0, 0, 1;
+    %set/v v012092B0_0, 1, 1;
+    %delay 25, 0;
+    %set/v v012092B0_0, 0, 1;
+    %end;
+    .thread T_4;
+    .scope S_01307DB0;
+T_5 ;
+    %delay 200, 0;
+    %vpi_call 2 65 "$finish";
+    %end;
+    .thread T_5;
+    .scope S_01307DB0;
+T_6 ;
+    %vpi_call 2 71 "$dumpfile", "out_fifo.vcd";
+    %vpi_call 2 72 "$dumpvars", 1'sb0, S_01307DB0;
+    %end;
+    .thread T_6;
+    .scope S_01307DB0;
+T_7 ;
+    %vpi_call 2 77 "$monitor", $stime, " ", v01208C80_0, " ", v01208E38_0, " ", " ", v01208E90_0, " ", v01209048_0, " ", v012092B0_0, " ", v01209200_0, " ", v01208FF0_0, " ", v01208F98_0;
+    %end;
+    .thread T_7;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "tfifo.v";
+    "fifo.v";
